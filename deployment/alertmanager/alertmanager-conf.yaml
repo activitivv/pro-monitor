@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alert-config
+  namespace: kube-ops
+data:
+  config.yml: |-
+    global:
+      resolve_timeout: 5m
+      smtp_smarthost: 'smtp.189.cn:25'
+      smtp_from: 'wangjieg@189.cn'
+      smtp_auth_username: 'wangjieg@189.cn'
+      smtp_auth_password: 'select*123'
+      smtp_hello: '189.cn'
+      smtp_require_tls: false
+    route:
+      group_by: ['alertname', 'cluster']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 5m
+      receiver: default
+      routes:
+      - receiver: email
+        group_wait: 10s
+        match:
+          team: node
+    receivers:
+    - name: 'default'
+      email_configs:
+      - to: 'wanjie.126@qq.com'
+        send_resolved: true
